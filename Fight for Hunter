@@ -6,7 +6,8 @@ local TblPet = ambufflist(HunterPet)
 
  if UnitName("target")== "幻灵晶体"
 then
- amrun(/targetlastenemy)
+--amrun(/targetlastenemy)
+print("切换目标:"..猎人)
 return;
 end
 
@@ -16,49 +17,63 @@ end
 
 -- 隐身时靠近猎人结界	
 if amfind("隐形术",Tbm) and amjl(Hunter)<15
-			then
-			  amrun ("寒冰结界")
-			end  	
+then
+	amrun ("寒冰结界")	
 return;      
 end
 
---出隐身输出	
-if  not amfind ("隐形术",Tbm) 
+--卡点黑鸦出隐身一套控制爆发	
+if  not amfind ("隐形术","夺命黑鸦",Tbm) 
 	then 
 
 --bust
-
+    if amcd("幻灵晶体") >80
+	then 
+	    if not amfind("寒冰新星",Tbt) then
+		amrun("寒冰新星")
+		return;
+        end
+		
+	    if not amfind("寒冰新星",Tbt) then
+		amrun("寒冰新星")
+		return;
+		end
+		
+	return;     
+	end
 
 		
 -- 放晶体爆发
-    if amfind("冰冻术",Tbt) and 主人的召唤cd
+    if amfind("冰冻术",Tbt)-- and 主人的召唤cd
 		then 
 			FHCastAOE(Hunter,"幻灵晶体")
-			return;     
+	return;     
 	end
 
---远离15码卡宝宝距离骗主人的召唤 后冰冻
-	if not amfind("冰冻术",Tbt) and 主人的召唤cd and amjl(HunterPet)>15--(Hunter,HunterPet)>15
+----靠近猎人时使用结界冻8秒，然后远离15码卡宝宝距离骗主人的召唤，后冰冻
+	if not amfind("冰冻术",Tbt) 
+	   and not amfind("主人的召唤",Tbt) 
+	   and amnewspelltime(Hunter,"主人的召唤")>0
+	   and FHObjectDistance(Hunter,HunterPet)>15 --and amjl(HunterPet)>15
 	then
 		amrun(冰冻术)
 		return;
 	end
 		
---深结逼出主人的召唤
-	if not amfind("寒冰结界",Tbt) or 寒冰结界的时间还剩1.5秒
+--寒冰结界逼出主人的召唤
+	if not amfind("寒冰结界",Tbt) or amaura("寒冰结界", Hunter,0,2)<1.5 
 	    then  
 		amrun("深度冻结")
 		--print("需要晕的目标:"..UnitName("target"))
 		return;
 	end
 
---靠近猎人时使用结界冻8秒
+
      
 return;
 end
 	
-	
--- 卡黑鸦
+--隐身术卡黑鸦
 if amfind("夺命黑鸦",Tbm) and amcd("隐形术") <=0 and not amfind("隐形术",Tbm)
  then	
 
@@ -111,10 +126,7 @@ return;
 end
 	
 
+--正常输出循环（晶体没有了以后）
+
 --return;
 --end
-
-
-
-
-
