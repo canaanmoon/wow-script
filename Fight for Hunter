@@ -4,20 +4,66 @@ local Tbm = ambufflist()
 local Tbt = ambufflist(Hunter)
 local TblPet = ambufflist(HunterPet)
 
+ if UnitName("target")== "幻灵晶体"
+then
+ amrun(/targetlastenemy)
+return;
+end
 
 --if  amzy()== 猎人 then
 
 
-if amfind("埃匹希斯印记",Tbm)   
-   
-then
-     
-	if amcd("隐形术") <=0
-	then
-	
 
-    if  amfind("深度冻结", Tbt) -- and amfind("寒冰结界,冰锥术",TblPet)
-    or  not amfind("深度冻结", Tbl) and amcd("深度冻结") >0 and amcd("闪现术") >0 and amcd("炽热疾速") >0 and amjl(Hunter)< 40
+-- 隐身时靠近猎人结界	
+if amfind("隐形术",Tbm) and amjl(Hunter)<15
+			then
+			  amrun ("寒冰结界")
+			end  	
+return;      
+end
+
+--出隐身输出	
+if  not amfind ("隐形术",Tbm) 
+	then 
+
+--bust
+
+
+		
+-- 放晶体爆发
+    if amfind("冰冻术",Tbt) and 主人的召唤cd
+		then 
+			FHCastAOE(Hunter,"幻灵晶体")
+			return;     
+	end
+
+--远离15码卡宝宝距离骗主人的召唤 后冰冻
+	if not amfind("冰冻术",Tbt) and 主人的召唤cd and amjl(HunterPet)>15--(Hunter,HunterPet)>15
+	then
+		amrun(冰冻术)
+		return;
+	end
+		
+--深结逼出主人的召唤
+	if not amfind("寒冰结界",Tbt) or 寒冰结界的时间还剩1.5秒
+	    then  
+		amrun("深度冻结")
+		--print("需要晕的目标:"..UnitName("target"))
+		return;
+	end
+
+--靠近猎人时使用结界冻8秒
+     
+return;
+end
+	
+	
+-- 卡黑鸦
+if amfind("夺命黑鸦",Tbm) and amcd("隐形术") <=0 and not amfind("隐形术",Tbm)
+ then	
+
+    if  amfind("深度冻结", Tbt) and amfind("寒冰结界,冰锥术",TblPet)
+    or  not amfind("深度冻结", Tbl) and amcd("深度冻结") >0 and amcd("闪现术") >0 and amcd("炽热疾速") >0 and amfind("寒冰新星", Tbt) and and amjl(Hunter)> 40 
 	then        
         amrun("隐形术") 
         return;
@@ -29,13 +75,19 @@ then
         return;
     end
     
-    if not amfind("深度冻结", Tbt) and amcd("深度冻结") >0   and  not FHgetFacing(Hunter,120) and  amjl(Hunter)< 40       
+    if not amfind("深度冻结", Tbt) and amcd("深度冻结") >0  and not FHgetFacing(Hunter,120) and  amjl(Hunter)< 40       
     then 
 	    amrun("闪现术") 
         return;
     end
+	
+	if not amfind("深度冻结", Tbt) and amcd("深度冻结") >0  and not amfind("寒冰新星",Tbt)
+	then 
+	amrun("寒冰新星") 
+	return;
+	end
     
-    if amfind("深度冻结", Tbt) and not amfind("寒冰结界",TblPet) and  amjl(HunterPet)<10 
+    if amfind("深度冻结", Tbt) and not amfind("寒冰结界",TblPet) and  amjl(HunterPet)<12
 	then        
         amrun("冰锥术") 
         return;
@@ -44,45 +96,25 @@ then
     if not amfind("冰冻术",Tbt) and amcd("冰冻术") <=0 
 	then 
         FHCastAOE(Hunter,"冰冻术")
-        --print("需要打的图腾:"..UnitName("target"))
+        --print("需要冰的目标:"..UnitName("target"))
         return;     
     end
     
     if not amfind("深度冻结",Tbt)  and amcd("深度冻结") <=0 
 	then  
         amrun("深度冻结")
-        --print("需要打的图腾:"..UnitName("target"))
+        --print("需要晕的目标:"..UnitName("target"))
         return;
     end
     
-else
-    
-    if amfind("冰冻术",Tbt) then 
-        FHCastAOE(Hunter,"幻灵晶体")
-        return;    
-    end    
-    
-    if not amfind("隐形术", Tb) --and not amfind("主人的召唤",Tbt) and amjl(Hunter)> 15 
-    then 
-        FHCast(Hunter ,"冰冻术")
-        return;     
-    end
-    
-    if amfind("隐形术", Tb) and amjl(Hunter)<8 then 
-        amrun("寒冰结界")        
-        return;     
-    end
-    
-    return;
-	end
-	
-	
-	
-    return;      
-end
-
-
-
-
 return;
 end
+	
+
+--return;
+--end
+
+
+
+
+
