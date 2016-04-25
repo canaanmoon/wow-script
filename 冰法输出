@@ -1,0 +1,47 @@
+--冰法输出
+--# Single target sequence
+--actions.single_target=call_action_list,name=cooldowns,if=!talent.prismatic_crystal.enabled|(cooldown.prismatic_crystal.remains>15&!legendary_ring.has_cooldown)
+--# Safeguards against losing FoF and BF to buff expiry
+--actions.single_target+="冰枪术",if=触发寒冰指&(buff.fingers_of_frost.remains<action.frostbolt.execute_time|buff.fingers_of_frost.remains<buff.fingers_of_frost.react*gcd.max)
+--actions.single_target+="寒冰箭",if=触发冰冷智慧&(buff.brain_freeze.remains<action.frostbolt.execute_time|buff.brain_freeze.remains<buff.brain_freeze.react*gcd.max)
+--# Frozen Orb usage without Prismatic Crystal
+--actions.single_target+=/寒冰炸弹,if=(!talent.prismatic_crystal.enabled|legendary_ring.cooldown.remains>45)&cooldown.frozen_orb.remains<gcd.max&debuff.frost_bomb.remains<10
+--actions.single_target+=/寒冰宝珠,if=(!talent.prismatic_crystal.enabled|legendary_ring.cooldown.remains>45)&buff.fingers_of_frost.stack<2&cooldown.icy_veins.remains>45-20*talent.thermal_void.enabled
+--# Single target routine; Rough summary: IN2 > FoF2 > CmS > IN > BF > FoF
+--actions.single_target+=/冰枪术,if=buff.fingers_of_frost.react&buff.shatterlance.up
+--actions.single_target+=/寒冰炸弹,if=remains<action.ice_lance.travel_time+t18_class_trinket*action.frostbolt.execute_time&(buff.fingers_of_frost.react>=(2+set_bonus.tier18_4pc*2)%(1+t18_class_trinket)|(buff.fingers_of_frost.react&(talent.thermal_void.enabled|buff.fingers_of_frost.remains<gcd.max*(buff.fingers_of_frost.react+1))))
+--actions.single_target+=/寒冰新星,if=target.time_to_die<10|(charges=2&(!talent.prismatic_crystal.enabled|!cooldown.prismatic_crystal.up))
+--actions.single_target+=/冰枪术if=!t18_class_trinket&(buff.fingers_of_frost.react>=2+set_bonus.tier18_4pc*2|(buff.fingers_of_frost.react>1+set_bonus.tier18_4pc&active_dot.frozen_orb))
+--actions.single_target+=/彗星风暴
+--actions.single_target+=/寒冰新星,if=(!talent.prismatic_crystal.enabled|(charges=1&cooldown.prismatic_crystal.remains>recharge_time&(buff.incanters_flow.stack>3|!talent.ice_nova.enabled)))&(buff.icy_veins.up|(charges=1&cooldown.icy_veins.remains>recharge_time))
+--actions.single_target+=/霜火箭,if=buff.brain_freeze.react
+--actions.single_target+=/call_action_list,name=init_water_jet,if=pet.water_elemental.cooldown.water_jet.remains<=gcd.max*talent.frost_bomb.enabled&buff.fingers_of_frost.react<2+2*set_bonus.tier18_4pc&!active_dot.frozen_orb
+--actions.single_target+=/frostbolt,if=t18_class_trinket&buff.fingers_of_frost.react&!buff.shatterlance.up
+--actions.single_target+=/"冰枪术",if=talent.frost_bomb.enabled&buff.fingers_of_frost.react&debuff.frost_bomb.remains>travel_time&(!talent.thermal_void.enabled|cooldown.icy_veins.remains>8)
+--# Camp procs and spam Frostbolt while 4T17 buff is up
+--actions.single_target+=/frostbolt,if=set_bonus.tier17_2pc&buff.ice_shard.up&!(talent.thermal_void.enabled&buff.icy_veins.up&buff.icy_veins.remains<10)
+--actions.single_target+=/ice_lance,if=!talent.frost_bomb.enabled&buff.fingers_of_frost.react&(!talent.thermal_void.enabled|cooldown.icy_veins.remains>8)
+--actions.single_target+=/frostbolt
+--actions.single_target+=/ice_lance,moving=1
+
+
+
+--晶体爆发
+--# Actions while Prismatic Crystal is active
+actions.crystal_sequence=寒冰炸弹,if=当前目标激活=1&当前目标!=晶体剩余时间<10
+actions.crystal_sequence+=/寒冰宝珠,target_if=max:target.time_to_die&target!=pet.prismatic_crystal
+actions.crystal_sequence+=/晶体
+actions.crystal_sequence+=/水流喷射,if=晶体剩余时间>(5+10*set_bonus.tier18_4pc)*spell_haste*0.9
+actions.crystal_sequence+=/call_action_list,name=cooldowns
+actions.crystal_sequence+=/寒冰炸弹,if=晶体天赋解锁&目标是晶体&active_enemies>1&!ticking
+actions.crystal_sequence+=/冰枪术,if=!t18_class_trinket&(冰指层数>=2+set_bonus.tier18_4pc*2|冰指层数>set_bonus.tier18_4pc*2&active_dot.frozen_orb))
+actions.crystal_sequence+=/寒冰新星,if=寒冰新星充能=2|晶体还剩4秒<4
+actions.crystal_sequence+=/冰枪术,if=触发寒冰指& buff.shatterlance.up
+actions.crystal_sequence+=/寒冰箭,if=2层冰冷智慧t=2
+actions.crystal_sequence+=/寒冰箭,target_if=max:debuff.water_jet.remains,if=t18_class_trinket&buff.fingers_of_frost.react&!buff.shatterlance.up&pet.prismatic_crystal.remains>cast_time
+actions.crystal_sequence+=/冰枪术,if=buff.fingers_of_frost.react
+actions.crystal_sequence+=/霜火箭,if=buff.brain_freeze.react
+actions.crystal_sequence+=/冰霜新星
+actions.crystal_sequence+=/blizzard,interrupt_if=cooldown.frozen_orb.up|(talent.frost_bomb.enabled&buff.fingers_of_frost.react>=2+set_bonus.tier18_4pc),if=active_enemies>=5
+actions.crystal_sequence+=/choose_target,if=pet.prismatic_crystal.remains<action.frostbolt.cast_time+action.frostbolt.travel_time
+actions.crystal_sequence+=/寒冰箭
