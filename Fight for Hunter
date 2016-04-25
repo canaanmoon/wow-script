@@ -15,11 +15,11 @@ if  amzy()== 猎人 then
 	
     if amfind("夺命黑鸦",Tbm) then 
 	
-	    if   amfind("深度冻结", Tbt) and amfind("寒冰结界,冰锥术",TblPet) 
+	        if amfind("深度冻结", Tbt) and amfind("寒冰结界,冰锥术",TblPet) 
 		  or not amfind("深度冻结", Tbl) and amcd("深度冻结") >0 and amcd("闪现") >0 and amcd("炽热疾速") >0                  then        
-	     amrun("隐身") 
+	        amrun("隐身") 
 		return;
-        end
+                end
         
 		if not amfind("深度冻结", Tbt) and amcd("深度冻结") >0 and amcd("闪现") >0 then        
 		  amrun("炽热疾速") 
