@@ -1,0 +1,41 @@
+		if amfind("寒冰指",Tbm) and HasTrinket(t18_class_trinket) and PreviousGCDSpell(frostbolt) 
+		then
+		   amrun("冰枪术")
+		return;
+		end	
+		
+		if ampbn("冰冷智慧") == 2 
+		then 
+		amrun("霜火箭")
+		return;
+		end
+			
+		if HasTrinket(t18_class_trinket) 
+			and BuffPresent(fingers_of_frost_buff) 
+			and not { HasTrinket(t18_class_trinket) 
+			and PreviousGCDSpell(frostbolt) } 
+			and amtotem("幻灵晶体") > CastTime(frostbolt) 
+		then 
+		    amrun("寒冰箭")
+		return;
+		end	
+		
+		if amfind("寒冰指",Tbm) then 
+		   amrun("冰枪术")
+		return;
+		end		
+	
+		if amfind("冰冷智慧",Tbm)then 
+		   amrun("霜火箭")
+		return;
+		end
+		
+		amrun("寒冰新星")
+		return;
+		
+		if Enemies() >= 5 
+		then
+			amrun("暴风雪")
+		return;
+		end 
+		
